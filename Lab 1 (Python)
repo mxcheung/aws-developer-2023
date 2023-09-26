@@ -1,0 +1,48 @@
+
+
+Lab 1 (Python) - Configure the Development Environment
+In this lab the student verifies the specific IDE is installed and configured to access AWS Services. They also use IAM to understand how permissions work.
+
+AWSLabsUser-47XppH7LKnjjWvx32QBJYC:~/environment $ python --version
+Python 3.7.16
+
+AWSLabsUser-47XppH7LKnjjWvx32QBJYC:~/environment $ aws --version
+aws-cli/2.13.21 Python/3.11.5 Linux/4.14.322-246.539.amzn2.x86_64 exe/x86_64.amzn.2 prompt/off
+
+AWSLabsUser-47XppH7LKnjjWvx32QBJYC:~/environment $ aws configure
+AWS Access Key ID [****************J6WI]: 
+AWS Secret Access Key [****************j9YC]: 
+Default region name [ap-northeast-1]: 
+Default output format [None]: yaml
+
+AWSLabsUser-47XppH7LKnjjWvx32QBJYC:~/environment $ aws sts get-caller-identity
+Account: '039076519945'
+Arn: arn:aws:sts::039076519945:assumed-role/AWSLabsUser-47XppH7LKnjjWvx32QBJYC/23d03e98-8142-4c90-ba2f-72571547b8c8
+UserId: AROAQSGJEMAEYBBWXCBOB:23d03e98-8142-4c90-ba2f-72571547b8c8
+
+
+Task 3.1 
+
+AWSLabsUser-47XppH7LKnjjWvx32QBJYC:~/environment $ aws s3 ls
+2023-03-02 21:27:33 awslabs-resources-krxqqla59sui8d-us-east-1-039076519945
+2023-09-26 21:56:14 labstack-23d03e98-8142-4c90-ba-lab1deletemebucket-epobbv1h015o
+2023-09-26 16:23:40 labstack-23d03e98-8142-4c90-ba-lab1deletemebucket-t4nx3na5u247
+2023-09-26 21:56:14 labstack-23d03e98-8142-4c90-ba2f-72571-lab1bucket-1digpzvsujaof
+2023-09-26 16:26:02 labstack-23d03e98-8142-4c90-ba2f-72571-lab1bucket-43gkswsuzpt3
+
+Task 3.2
+
+
+AWSLabsUser-47XppH7LKnjjWvx32QBJYC:~/environment $ bucketToDelete=$(aws s3api list-buckets --output text --query 'Buckets[?contains(Name, `deletemebucket`) == `true`] | [0].Name')
+AWSLabsUser-47XppH7LKnjjWvx32QBJYC:~/environment $ aws s3 rb s3://$bucketToDelete
+remove_bucket failed: s3://labstack-23d03e98-8142-4c90-ba-lab1deletemebucket-epobbv1h015o An error occurred (AccessDenied) when calling the DeleteBucket operation: Access Denied
+
+
+
+
+aws s3 rb s3://$bucketToDelete --debug
+policyArn=$(aws iam list-policies --output text --query 'Policies[?PolicyName == `S3-Delete-Bucket-Policy`].Arn')
+aws iam get-policy-version --policy-arn $policyArn --version-id v1
+
+
+aws s3 rb s3://$bucketToDelete
