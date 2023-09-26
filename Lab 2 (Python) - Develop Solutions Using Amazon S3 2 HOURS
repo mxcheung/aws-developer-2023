@@ -5,3 +5,12 @@ In this lab, students will develop a portion of the application using Amazon S3 
 
 client = boto3.client('s3')
 Boto3 will no longer support Python 3.7 starting December 13, 2023.
+
+
+s3-website- Europe (Ireland) or s3-website.      Europe (London)
+   Europe (London) s3-website-eu-west-2.amazonaws.com
+        s3-website.eu-west-2
+        http://notes-bucket-505131840.s3-website.eu-west-2.amazonaws.com/
+    Europe (Ireland) s3-website.eu-west-2.amazonaws.com
+        s3-website.eu-west-2
+ 
