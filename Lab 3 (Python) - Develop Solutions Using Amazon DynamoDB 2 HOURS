@@ -1,5 +1,46 @@
-
 Lab 3 (Python) - Develop Solutions Using Amazon DynamoDB 2 HOURS
 In this lab, students will develop programs to create an Amazon DynamoDB table to store notes for the lab application and perform CRUD operation on the table
 
+
+loading note {'UserId': 'testuser', 'NoteId': '001', 'Note': 'hello'}
+loading note {'UserId': 'testuser', 'NoteId': '002', 'Note': 'this is my first note'}
+loading note {'UserId': 'newbie', 'NoteId': '001', 'Note': 'Free swag code: 1234'}
+loading note {'UserId': 'newbie', 'NoteId': '002', 'Note': 'I love DynamoDB'}
+loading note {'UserId': 'student', 'NoteId': '001', 'Note': 'DynamoDB is NoSQL'}
+loading note {'UserId': 'student', 'NoteId': '002', 'Note': 'A DynamoDB table is schemaless'}
+loading note {'UserId': 'student', 'NoteId': '003', 'Note': 'PartiQL is a SQL compatible language for DynamoDB'}
+loading note {'UserId': 'student', 'NoteId': '005', 'Note': 'Maximum size of an item is ____ KB ?'}
+loading note {'UserId': 'student', 'NoteId': '004', 'Note': 'I love DyDB'}
+
+
+************
+Querying for notes that belong to user student...
+
+{"Note": "DynamoDB is NoSQL", "NoteId": "1"}
+{"Note": "A DynamoDB table is schemaless", "NoteId": "2"}
+{"Note": "PartiQL is a SQL compatible language for DynamoDB", "NoteId": "3"}
+{"Note": "I love DyDB", "NoteId": "4"}
+{"Note": "Maximum size of an item is ____ KB ?", "NoteId": "5"}
+
+
+
+Updating the note flag for remediation...
+
+{'Note': {'S': 'Maximum size of an item is ____ KB ?'}, 'UserId': {'S': 'student'}, 'NoteId': {'N': '5'}, 'Is_Incomplete': {'S': 'Yes'}}
+
+Remediating the marked note...
+
+{'Note': {'S': 'The maximum item size in DynamoDB is 400 KB'}, 'UserId': {'S': 'student'}, 'NoteId': {'N': '5'}, 'Is_Incomplete': {'S': 'No'}}
+
+
+
+
+******************************
+**** This is OUTPUT ONLY. ****
+******************************
+
+************
+Querying for note 5 that belongs to user student...
+
+{"Note": "The maximum item size in DynamoDB is 400 KB", "UserId": "student", "NoteId": "5", "Is_Incomplete": "No"}
 
