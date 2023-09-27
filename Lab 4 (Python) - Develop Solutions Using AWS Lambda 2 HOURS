@@ -1,0 +1,44 @@
+Lab 4 (Python) - Develop Solutions Using AWS Lambda 2 HOURS
+In this lab, students will create the backend logic for the application by deploying their code with AWS Lambda functions.
+
+
+apiBucket=labstack-23d03e98-8142-4c90-b-pollynotesapibucket-clbebu9ffrvw
+
+
+aws lambda update-function-configuration \
+--function-name dictate-function \
+--environment Variables="{MP3_BUCKET_NAME=$apiBucket, TABLE_NAME=$notesTable}"
+
+
+
+{"errorMessage": "name 'pollyResponse' is not defined", "errorType": "NameError", "requestId": "7206a9bb-bbad-4a15-b87a-37a60dcfb666", 
+"stackTrace": ["  File \"/var/task/app.py\", line 30, in lambda_handler\n    filePath = createMP3File(pollyClient, text, VoiceId, NoteId)\n", " 
+ File \"/var/task/app.py\", line 57, in createMP3File\n    if \"AudioStream\" in pollyResponse:\n"]}
+
+
+roleArn=$(aws iam list-roles --output text --query 'Roles[?contains(RoleName, `lambdaPollyRole`) == `true`].Arn')
+folderName=createUpdate-function
+
+
+aws lambda create-function \
+--function-name $folderName  \
+--handler app.lambda_handler \
+--runtime python3.11 \
+--role $roleArn \
+--environment Variables={TABLE_NAME=$notesTable} \
+--zip-file fileb://$folderName.zip
+
+
+
+apiBucket=labstack-23d03e98-8142-4c90-b-pollynotesapibucket-clbebu9ffrvw
+notesTable='Notes'
+
+
+    mp3Bucket = os.environ['MP3_BUCKET_NAME']
+    ddbTable = os.environ['TABLE_NAME']
+
+
+aws lambda update-function-configuration \
+--function-name dictate-function \
+--environment Variables="{MP3_BUCKET_NAME=$apiBucket, TABLE_NAME=$notesTable}"
+
