@@ -26,4 +26,34 @@ s3-website- Europe (Ireland) or s3-website.      Europe (London)
         http://notes-bucket-505131840.s3-website.eu-west-2.amazonaws.com/
   Europe (Ireland) s3-website.eu-west-2.amazonaws.com
         s3-website.eu-west-2
- 
+
+
+Europe (Ireland) s3-website-eu-west-1.amazonaws.com
+Europe (London)  s3-website-eu-west-2.amazonaws.com
+	
+s3-website-eu-west-1.amazonaws.com
+
+
+
+http://notes-bucket-505131840.s3-website-eu-west-2.amazonaws.com
+
+Start of create bucket script
+
+
+Reading configuration file for bucket name...
+Verifying that the bucket name is valid...
+Existing Bucket Not Found, please proceed
+notes-bucket-505131840
+
+Creating notes-bucket-505131840 in eu-west-2
+Success!
+
+Confirm that the bucket exists...
+The bucket:notes-bucket-505131840 is now available.
+
+End of create bucket script
+
+
+
+client = boto3.client('s3')
+Boto3 will no longer support Python 3.7 starting December 13, 2023.
