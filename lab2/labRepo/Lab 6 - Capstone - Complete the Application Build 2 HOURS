@@ -22,6 +22,9 @@ aws cognito-idp admin-confirm-sign-up --user-pool-id $CognitoPoolId --username s
 
 http://labstack-23d03e98-8142-4c90-ba2f-testloginbucket-1rr9pmupif5sb.s3-website-us-east-1.amazonaws.com
 
+https://us-east-1.console.aws.amazon.com/apigateway/home?region=us-east-1#/apis/dx7rrvqqg8/authorizers
+
+
 
 {
   "origin_jti": "46f253ed-31f7-47de-a5df-1f506af4da32",
