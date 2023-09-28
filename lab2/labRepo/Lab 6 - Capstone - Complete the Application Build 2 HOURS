@@ -1,0 +1,57 @@
+Lab 6 - Capstone - Complete the Application Build 2 HOURS
+In this lab, you will learn how to set up Amazon Cognito to authenticate and authorize users to use your API.
+
+
+User pool ID: us-east-1_R1zBr2fJ3
+Arn:   arn:aws:cognito-idp:us-east-1:039076519945:userpool/us-east-1_R1zBr2fJ3
+Client: 	2ujrdbgsu650f9d7ruhttgo1ma
+
+apiURL='https://dx7rrvqqg8.execute-api.us-east-1.amazonaws.com/Prod'
+CognitoPoolId='us-east-1_R1zBr2fJ3'
+AppClientId='2ujrdbgsu650f9d7ruhttgo1ma'
+
+aws cognito-idp sign-up --client-id $AppClientId --username student --password student
+
+{
+    "UserConfirmed": false,
+    "UserSub": "44d874a8-b071-70f1-b3f9-4d072cd17c54"
+}
+
+aws cognito-idp admin-confirm-sign-up --user-pool-id $CognitoPoolId --username student
+
+
+http://labstack-23d03e98-8142-4c90-ba2f-testloginbucket-1rr9pmupif5sb.s3-website-us-east-1.amazonaws.com
+
+
+{
+  "origin_jti": "46f253ed-31f7-47de-a5df-1f506af4da32",
+  "sub": "44d874a8-b071-70f1-b3f9-4d072cd17c54",
+  "aud": "2ujrdbgsu650f9d7ruhttgo1ma",
+  "event_id": "7eff936a-a667-45b1-9957-bb58026596f0",
+  "token_use": "id",
+  "auth_time": 1695874682,
+  "iss": "https://cognito-idp.us-east-1.amazonaws.com/us-east-1_R1zBr2fJ3",
+  "cognito:username": "student",
+  "exp": 1695878282,
+  "iat": 1695874682,
+  "jti": "51858288-f3d9-4ce5-b901-913fd409aee1"
+}
+
+Authorizers
+Authorizers enable you to control access to your APIs using Amazon Cognito User Pools or a Lambda function.
+
+
+Response Response Code: 200  Latency 13 Claims
+{
+"aud": "2ujrdbgsu650f9d7ruhttgo1ma",
+"auth_time": "1695874682",
+"cognito:username": "student",
+"event_id": "7eff936a-a667-45b1-9957-bb58026596f0",
+"exp": "Thu Sep 28 05:18:02 UTC 2023",
+"iat": "Thu Sep 28 04:18:02 UTC 2023",
+"iss": "https://cognito-idp.us-east-1.amazonaws.com/us-east-1_R1zBr2fJ3",
+"jti": "51858288-f3d9-4ce5-b901-913fd409aee1",
+"origin_jti": "46f253ed-31f7-47de-a5df-1f506af4da32",
+"sub": "44d874a8-b071-70f1-b3f9-4d072cd17c54",
+"token_use": "id"
+}
