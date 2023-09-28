@@ -58,3 +58,86 @@ Response Response Code: 200  Latency 13 Claims
 "sub": "44d874a8-b071-70f1-b3f9-4d072cd17c54",
 "token_use": "id"
 }
+
+"UserId": "$context.authorizer.claims['cognito:username']",
+
+AWSLabsUser-rcne1URVvFeVRVHJWjYVyL:~/environment $ aws cognito-idp admin-confirm-sign-up --user-pool-id $CognitoPoolId --username student
+AWSLabsUser-rcne1URVvFeVRVHJWjYVyL:~/environment $ region=$(curl http://169.254.169.254/latest/meta-data/placement/region -s)
+AWSLabsUser-rcne1URVvFeVRVHJWjYVyL:~/environment $ 
+AWSLabsUser-rcne1URVvFeVRVHJWjYVyL:~/environment $ acct=$(aws sts get-caller-identity --output text --query "Account")
+
+AWSLabsUser-rcne1URVvFeVRVHJWjYVyL:~/environment $ 
+AWSLabsUser-rcne1URVvFeVRVHJWjYVyL:~/environment $ poolId=$(aws cognito-idp list-user-pools --max-results 1 --output text --query "UserPools[].Id")
+AWSLabsUser-rcne1URVvFeVRVHJWjYVyL:~/environment $ 
+AWSLabsUser-rcne1URVvFeVRVHJWjYVyL:~/environment $ poolArn="arn:aws:cognito-idp:$region:$acct:userpool/$poolId"
+AWSLabsUser-rcne1URVvFeVRVHJWjYVyL:~/environment $ 
+AWSLabsUser-rcne1URVvFeVRVHJWjYVyL:~/environment $ sed -i "s~\[Cognito_Pool_ARN\]~$poolArn~g" ~/environment/api/PollyNotesAPI-swagger.yaml
+AWSLabsUser-rcne1URVvFeVRVHJWjYVyL:~/environment $ 
+AWSLabsUser-rcne1URVvFeVRVHJWjYVyL:~/environment $ sed -i "s~\[AWS_Region\]~$region~g" ~/environment/api/PollyNotesAPI-swagger.yaml
+AWSLabsUser-rcne1URVvFeVRVHJWjYVyL:~/environment $ 
+AWSLabsUser-rcne1URVvFeVRVHJWjYVyL:~/environment $ sed -i "s~\[AWS_AccountId\]~$acct~g" ~/environment/api/PollyNotesAPI-swagger.yaml
+
+
+apiId=$(aws apigateway get-rest-apis --query "items[?name == 'PollyNotesAPI'].id" --output text)
+
+aws apigateway put-rest-api --rest-api-id $apiId --mode merge --body 'fileb://PollyNotesAPI-swagger.yaml'
+
+{
+    "id": "dx7rrvqqg8",
+    "name": "PollyNotesAPI",
+    "createdDate": "2023-09-28T02:12:00+00:00",
+    "apiKeySource": "HEADER",
+    "endpointConfiguration": {
+        "types": [
+            "REGIONAL"
+        ]
+    },
+    "tags": {
+        "aws:cloudformation:logical-id": "pollyNotesAPI",
+        "aws:cloudformation:stack-id": "arn:aws:cloudformation:us-east-1:039076519945:stack/LabStack-23d03e98-8142-4c90-ba2f-72571547b8c8-rcne1URVvFeVRVHJWjYVyL-0/6447a260-5da4-11ee-8b1b-12cd83c5309b",
+        "aws:cloudformation:stack-name": "LabStack-23d03e98-8142-4c90-ba2f-72571547b8c8-rcne1URVvFeVRVHJWjYVyL-0"
+    },
+    "disableExecuteApiEndpoint": false,
+    "rootResourceId": "pwzr20rmd3"
+}
+
+
+AWSLabsUser-rcne1URVvFeVRVHJWjYVyL:~/environment/api (main) $ aws apigateway create-deployment --rest-api-id $apiId --stage-name Prod
+{
+    "id": "kgaqa4",
+    "createdDate": "2023-09-28T04:41:06+00:00"
+}
+
+
+aws lambda add-permission --function-name delete-function --statement-id apiInvoke --action lambda:InvokeFunction --principal apigateway.amazonaws.com
+
+aws lambda add-permission --function-name dictate-function --statement-id apiInvoke --action lambda:InvokeFunction --principal apigateway.amazonaws.com
+
+aws lambda add-permission --function-name search-function --statement-id apiInvoke --action lambda:InvokeFunction --principal apigateway.amazonaws.com
+
+
+
+
+webBucket=labstack-23d03e98-8142-4c90-ba2f-72-pollynotesweb-10erpjdb44tqf
+
+
+AWSLabsUser-rcne1URVvFeVRVHJWjYVyL:~/environment/web (main) $ aws s3 sync --delete build/. s3://$webBucket
+upload: build/asset-manifest.json to s3://labstack-23d03e98-8142-4c90-ba2f-72-pollynotesweb-10erpjdb44tqf/asset-manifest.json
+upload: build/static/js/2.16e7aa1e.chunk.js.LICENSE.txt to s3://labstack-23d03e98-8142-4c90-ba2f-72-pollynotesweb-10erpjdb44tqf/static/js/2.16e7aa1e.chunk.js.LICENSE.txt
+upload: build/manifest.json to s3://labstack-23d03e98-8142-4c90-ba2f-72-pollynotesweb-10erpjdb44tqf/manifest.json
+upload: build/static/js/main.f90f740f.chunk.js to s3://labstack-23d03e98-8142-4c90-ba2f-72-pollynotesweb-10erpjdb44tqf/static/js/main.f90f740f.chunk.js
+upload: build/robots.txt to s3://labstack-23d03e98-8142-4c90-ba2f-72-pollynotesweb-10erpjdb44tqf/robots.txt
+upload: build/static/css/main.c56fd950.chunk.css to s3://labstack-23d03e98-8142-4c90-ba2f-72-pollynotesweb-10erpjdb44tqf/static/css/main.c56fd950.chunk.css
+upload: build/index.html to s3://labstack-23d03e98-8142-4c90-ba2f-72-pollynotesweb-10erpjdb44tqf/index.html
+upload: build/favicon.ico to s3://labstack-23d03e98-8142-4c90-ba2f-72-pollynotesweb-10erpjdb44tqf/favicon.ico
+upload: build/static/js/runtime-main.7e0376b9.js to s3://labstack-23d03e98-8142-4c90-ba2f-72-pollynotesweb-10erpjdb44tqf/static/js/runtime-main.7e0376b9.js
+upload: build/static/css/2.4c97ca4f.chunk.css to s3://labstack-23d03e98-8142-4c90-ba2f-72-pollynotesweb-10erpjdb44tqf/static/css/2.4c97ca4f.chunk.css
+upload: build/static/js/runtime-main.7e0376b9.js.map to s3://labstack-23d03e98-8142-4c90-ba2f-72-pollynotesweb-10erpjdb44tqf/static/js/runtime-main.7e0376b9.js.map
+upload: build/static/js/main.f90f740f.chunk.js.map to s3://labstack-23d03e98-8142-4c90-ba2f-72-pollynotesweb-10erpjdb44tqf/static/js/main.f90f740f.chunk.js.map
+upload: build/static/css/main.c56fd950.chunk.css.map to s3://labstack-23d03e98-8142-4c90-ba2f-72-pollynotesweb-10erpjdb44tqf/static/css/main.c56fd950.chunk.css.map
+upload: build/static/css/2.4c97ca4f.chunk.css.map to s3://labstack-23d03e98-8142-4c90-ba2f-72-pollynotesweb-10erpjdb44tqf/static/css/2.4c97ca4f.chunk.css.map
+upload: build/static/js/2.16e7aa1e.chunk.js.map to s3://labstack-23d03e98-8142-4c90-ba2f-72-pollynotesweb-10erpjdb44tqf/static/js/2.16e7aa1e.chunk.js.map
+upload: build/static/js/2.16e7aa1e.chunk.js to s3://labstack-23d03e98-8142-4c90-ba2f-72-pollynotesweb-10erpjdb44tqf/static/js/2.16e7aa1e.chunk.js
+
+
+http://labstack-23d03e98-8142-4c90-ba2f-72-pollynotesweb-10erpjdb44tqf.s3-website-us-east-1.amazonaws.com/
