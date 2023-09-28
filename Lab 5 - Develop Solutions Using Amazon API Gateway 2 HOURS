@@ -1,0 +1,79 @@
+Lab 5 - Develop Solutions Using Amazon API Gateway 2 HOURS
+In this lab, you will create an Amazon API Gateway resource for your application.
+
+[{"Note": "hello world", "UserId": "testuser", "NoteId": 1}, 
+
+/notes - GET - Integration Request
+ Integration Request
+Provide information about the target backend that this method will call and whether the incoming request data should be modified.
+===  filter by userid ==> student 
+{"UserId":"student"}
+[{"Note": "DynamoDB is NoSQL", "UserId": "student", "NoteId": 1}, {"Note": "A DynamoDB table is schemaless", "UserId": "student", "NoteId": 2}]
+
+our current passthrough behavior will pass all request payloads directly to the endpoint without transformation, unless there is a match for the incoming Content-Type. 
+Do you want to secure this integration to only allow requests that match one of your defined Content-Types?
+
+
+/notes - GET - Integration Response
+First, declare response types using Method Response. Then, map the possible responses from the backend to this method's response types.
+
+[
+        {
+    "NoteId" : "1",
+    "Note" : "DynamoDB is NoSQL"
+    } 
+    ,        {
+    "NoteId" : "2",
+    "Note" : "A DynamoDB table is schemaless"
+    } 
+        ]
+
+
+POST
+ Method Execution /notes - POST - Method Test
+
+
+{
+    "Note": "This is your new note added using the POST method",
+    "NoteId": 3,
+    "UserId": "student"
+}
+
+
+Thu Sep 28 01:55:54 UTC 2023 : Request body does not match model schema for content type application/json: [object has missing required properties (["NoteId"])] 
+
+
+Enable CORS
+✔ Create OPTIONS method
+✔ Add 200 Method Response with Empty Response Model to OPTIONS method
+✔ Add Mock Integration to OPTIONS method
+✔ Add 200 Integration Response to OPTIONS method
+✔ Add Access-Control-Allow-Headers, Access-Control-Allow-Methods, Access-Control-Allow-Origin Method Response Headers to OPTIONS method
+✔ Add Access-Control-Allow-Headers, Access-Control-Allow-Methods, Access-Control-Allow-Origin Integration Response Header Mappings to OPTIONS method
+✔ Add Access-Control-Allow-Headers, Access-Control-Allow-Methods, Access-Control-Allow-Origin Response Headers to DEFAULT 4XX Gateway Response
+✔ Add Access-Control-Allow-Headers, Access-Control-Allow-Methods, Access-Control-Allow-Origin Response Headers to DEFAULT 5XX Gateway Response
+✔ Add Access-Control-Allow-Origin Method Response Header to GET method
+✔ Add Access-Control-Allow-Origin Integration Response Header Mapping to GET method
+✔ Add Access-Control-Allow-Origin Method Response Header to POST method
+✔ Add Access-Control-Allow-Origin Integration Response Header Mapping to POST method
+
+
+
+ Invoke URL: https://owu3aiuzig.execute-api.ap-northeast-1.amazonaws.com/Prod
+https://owu3aiuzig.execute-api.ap-northeast-1.amazonaws.com/Prod/notes
+
+[
+        {
+    "NoteId" : "1",
+    "Note" : "DynamoDB is NoSQL"
+    } 
+    ,        {
+    "NoteId" : "2",
+    "Note" : "A DynamoDB table is schemaless"
+    } 
+    ,        {
+    "NoteId" : "3",
+    "Note" : "This is your updated note using the Model validation"
+    } 
+        ]
+
