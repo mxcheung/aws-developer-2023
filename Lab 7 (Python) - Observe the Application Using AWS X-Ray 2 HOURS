@@ -1,0 +1,112 @@
+Lab 7 (Python) - Observe the Application Using AWS X-Ray 2 HOURS
+The application that you have built in previous labs has been re-deployed with AWS SAM. You will instrument the application code with AWS X-Ray to observe the operational state of the application.
+
+labstack-23d03e98-8142-4c90-ba2f-72-pollynotesapi-1u9ic7japbky7
+
+http://labstack-23d03e98-8142-4c90-ba2f-72-pollynotesweb-jegja6fc9aw3.s3-website-us-west-2.amazonaws.com
+
+apiBucket=labstack-23d03e98-8142-4c90-ba2f-72-pollynotesapi-1u9ic7japbky7
+
+{
+    "VolumeModification": {
+        "VolumeId": "vol-0398173c4840c93d9",
+        "ModificationState": "modifying",
+        "TargetSize": 15,
+        "TargetIops": 3000,
+        "TargetVolumeType": "gp3",
+        "TargetThroughput": 125,
+        "TargetMultiAttachEnabled": false,
+        "OriginalSize": 10,
+        "OriginalIops": 3000,
+        "OriginalVolumeType": "gp3",
+        "OriginalThroughput": 125,
+        "OriginalMultiAttachEnabled": false,
+        "Progress": 0,
+        "StartTime": "2023-09-29T00:35:42+00:00"
+    }
+}
+
+
+CHANGED: partition=1 start=4096 old: size=20967391 end=20971487 new: size=31453151 end=31457247
+meta-data=/dev/nvme0n1p1         isize=512    agcount=6, agsize=524159 blks
+         =                       sectsz=512   attr=2, projid32bit=1
+         =                       crc=1        finobt=1, sparse=0, rmapbt=0
+         =                       reflink=0    bigtime=0 inobtcount=0
+data     =                       bsize=4096   blocks=2620923, imaxpct=25
+         =                       sunit=0      swidth=0 blks
+naming   =version 2              bsize=4096   ascii-ci=0, ftype=1
+log      =internal log           bsize=4096   blocks=2560, version=2
+         =                       sectsz=512   sunit=0 blks, lazy-count=1
+realtime =none                   extsz=4096   blocks=0, rtextents=0
+data blocks changed from 2620923 to 3931643
+
+
+sam build --use-container
+
+
+Fetching public.ecr.aws/sam/build-python3.8:latest-x86_64 Docker container image......
+Mounting /home/ec2-user/environment/api/dictate-function as /tmp/samcli/source:ro,delegated inside runtime container
+
+Build Succeeded
+
+Built Artifacts  : .aws-sam/build
+Built Template   : .aws-sam/build/template.yaml
+
+Commands you can use next
+=========================
+[*] Validate SAM template: sam validate
+[*] Invoke Function: sam local invoke
+[*] Test Function in the Cloud: sam sync --stack-name {{stack-name}} --watch
+[*] Deploy: sam deploy --guided
+ Running PythonPipBuilder:ResolveDependencies
+ Running PythonPipBuilder:CopySource
+
+
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Key                 ApiURL                                                                                                                                                                                                                      
+Description         API Gateway endpoint URL for Prod stage                                                                                                                                                                                     
+Value               https://mf2ype72jb.execute-api.us-west-2.amazonaws.com/Prod                                                                                                                                                                 
+
+Key                 UserPoolId                                                                                                                                                                                                                  
+Description         -                                                                                                                                                                                                                           
+Value               us-west-2_kQNFCOwz6                                                                                                                                                                                                         
+
+Key                 AppClientId                                                                                                                                                                                                                 
+Description         -                                                                                                                                                                                                                           
+Value               1d144d3kmbn2c3htr00staripm                                                                                                                                                                                                  
+
+Key                 CognitoPoolArn                                                                                                                                                                                                              
+Description         -                                                                                                                                                                                                                           
+Value               arn:aws:cognito-idp:us-west-2:039076519945:userpool/us-west-2_kQNFCOwz6                                                                                                                                                     
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Successfully created/updated stack - polly-notes-api in us-west-2
+
+
+
+http://labstack-23d03e98-8142-4c90-ba2f-72-pollynotesweb-jegja6fc9aw3.s3-website-us-west-2.amazonaws.com
+
+
+
+
+message
+An error occurred (AccessDeniedException) when calling the DeleteItem operation: User: arn:aws:sts::039076519945:assumed-role/DynamoDBReadRole/polly-notes-api-deleteFunction-cF8Mz6Pq302v is not authorized to perform: dynamodb:DeleteItem on resource: arn:aws:dynamodb:us-west-2:039076519945:table/Notes because no identity-based policy allows the dynamodb:DeleteItem action
+
+
+
+sam build --use-container
+
+Role: !Sub arn:aws:iam::${AWS::AccountId}:role/DynamoDBWriteRole
+
+2023-09-29 01:04:05 - Waiting for stack create/update to complete
+
+CloudFormation events from stack operations (refresh every 0.5 seconds)
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ResourceStatus                                                                 ResourceType                                                                   LogicalResourceId                                                              ResourceStatusReason                                                         
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+UPDATE_IN_PROGRESS                                                             AWS::Lambda::Function                                                          deleteFunction                                                                 -                                                                            
+UPDATE_COMPLETE                                                                AWS::Lambda::Function                                                          deleteFunction                                                                 -                                                                            
+UPDATE_COMPLETE_CLEANUP_IN_PROGRESS                                            AWS::CloudFormation::Stack                                                     polly-notes-api                                                                -                                                                            
+UPDATE_COMPLETE                                                                AWS::CloudFormation::Stack                                                     polly-notes-api                                                                -                                                                            
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+CloudFormation outputs from deployed stack
